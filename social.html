@@ -65,6 +65,8 @@ details.parents li{margin:6px 0}
 .qno{color:var(--muted);font-size:16px;margin-bottom:6px}
 .opts{display:flex;flex-direction:column;gap:12px;margin-top:16px}
 .opt{display:flex;align-items:center;gap:12px;text-align:left;font-size:clamp(19px,5.2vw,24px);padding:12px 16px;min-height:64px;border:4px solid transparent;background:#fff7ee}
+.oes{display:block;color:var(--muted);font-size:.72em;font-weight:400;line-height:1.2}
+.tile .oes{font-size:.6em;color:var(--ink);opacity:.7}
 .qes{color:var(--muted);font-size:16px;margin-top:4px}
 .qpic{margin:10px auto 0;text-align:center}
 .qpic svg{max-width:100%;width:auto;height:clamp(150px,34vh,250px);border-radius:14px;border:3px solid #eee;background:#fff}
@@ -210,6 +212,8 @@ details.parents li{margin:6px 0}
 <script src="social-pics.js"></script>
 <script>
 const D = window.SOCIAL, PICS = window.SOCIAL_PICS;
+const TR = D.tr || {};
+const esOf = t => TR[t] && TR[t]!==t ? `<small class="oes">${TR[t]}</small>` : '';
 const PRAISE = ['¡Muy bien!','¡Excelente!','¡Lo sabías!','¡Bravo!'];
 const $ = id => document.getElementById(id);
 const shuffle = a => { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
@@ -329,7 +333,7 @@ function load(first){
   $('qtext').textContent = q.q;
   $('qes').textContent = q.es || '';
   $('qpic').innerHTML = q.pic ? PICS[q.pic] : '';
-  $('opts').innerHTML = G.opts.map((o,i)=>`<button class="btn opt" data-i="${i}"><span class="e">${o.e}</span><span>${o.t}</span></button>`).join('');
+  $('opts').innerHTML = G.opts.map((o,i)=>`<button class="btn opt" data-i="${i}"><span class="e">${o.e}</span><span>${o.t}${esOf(o.t)}</span></button>`).join('');
   $('opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.i, b));
   $('why').className = 'why'; $('next').className = 'btn primary next';
   readQuestion(first);
@@ -359,7 +363,7 @@ function answer(i, btn){
   } else {
     if(!G.retried.has(q)){ G.retried.add(q); G.queue.push(q); }
     sfx.oops(); btn.classList.add('wiggle');
-    $('why').innerHTML = `<div class="h">¡Casi! 💪</div>La respuesta es: <b>${right.e} ${right.t}</b><br>${q.why}`;
+    $('why').innerHTML = `<div class="h">¡Casi! 💪</div>La respuesta es: <b>${right.e} ${right.t}</b>${TR[right.t]&&TR[right.t]!==right.t?` (${TR[right.t]})`:''}<br>${q.why}`;
     play([D.phrases.bad, right.t, q.why]);
   }
   $('why').classList.add('on'); $('next').classList.add('on');
@@ -446,7 +450,7 @@ function roundCompass(mode){
   GM.sel = null; GM.left = 4;
   const label = k => mode==='words' ? DIRS[k] : k;
   $('garea').innerHTML = `<div class="rose">${PICS.compassBlank}${Object.keys(DIRS).map(k=>`<button class="rslot ${k}" data-slot="${k}">?</button>`).join('')}</div>
-    <div class="tiles">${shuffle(Object.keys(DIRS)).map(k=>`<button class="btn tile" data-tile="${k}">${label(k)}</button>`).join('')}</div>`;
+    <div class="tiles">${shuffle(Object.keys(DIRS)).map(k=>`<button class="btn tile" data-tile="${k}">${label(k)}${esOf(DIRS[k])}</button>`).join('')}</div>`;
   const tiles = [...$('garea').querySelectorAll('[data-tile]')];
   tiles.forEach(t=>t.onclick=()=>{
     if(GM.done) return;
@@ -459,7 +463,7 @@ function roundCompass(mode){
     if(sl.dataset.slot !== GM.sel) return gameMiss(sl);
     sl.textContent = label(GM.sel); sl.classList.add('done');
     tiles.find(x=>x.dataset.tile===GM.sel).remove(); GM.sel = null; GM.left--;
-    if(GM.left===0) gameWin('🧭 North ⬆️  South ⬇️  East ➡️  West ⬅️');
+    if(GM.left===0) gameWin('🧭 North = Norte · South = Sur · East = Este · West = Oeste');
   });
 }
 
@@ -481,7 +485,7 @@ function roundMap([ref, dir, target]){
       return;
     }
     rect(id).setAttribute('fill', '#bff0cf'); rect(id).setAttribute('stroke', '#22a861'); rect(id).setAttribute('stroke-width', 4);
-    gameWin(`✅ ${CAP(P[target][0])} is ${dir} of ${P[ref][0]}.`);
+    gameWin(`✅ ${CAP(P[target][0])} is ${dir} (${DIR_ES[dir]}) of ${P[ref][0]}.`);
   });
 }
 
