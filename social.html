@@ -79,6 +79,31 @@ details.parents li{margin:6px 0}
 .next{display:none;width:100%;margin-top:14px;font-size:24px}
 .next.on{display:block}
 
+/* Games */
+.games{margin-top:18px;background:#fff;border-radius:28px;padding:16px;box-shadow:var(--shadow)}
+.games h2{margin:0 0 10px;text-align:center;font-size:26px}
+.glist{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.glist .btn{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:16px;padding:12px 4px;background:#fff7ee;line-height:1.15}
+.glist .btn span{font-size:38px}
+.ginstr{display:flex;gap:12px;align-items:center}
+.ginstr>div{flex:1}
+.ginstr .btn{font-size:28px;padding:12px 14px;background:#ffcf3f;flex-shrink:0}
+.garea{margin-top:12px;text-align:center}
+.garea svg{max-width:100%}
+.gmsg{min-height:30px;font-size:20px;font-weight:600;text-align:center;margin-top:8px}
+.rose{position:relative;width:min(250px,64vw);height:min(250px,64vw);margin:36px auto 52px}
+.rose svg{width:100%;height:100%}
+.rslot{position:absolute;min-width:64px;height:56px;padding:0 8px;border:4px dashed #c9b8a0;border-radius:16px;background:#fffaf2;font:inherit;font-size:24px;font-weight:700;color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;transform:translate(-50%,-50%)}
+.rslot.done{border-style:solid;border-color:var(--ok);background:#dff7ea;color:var(--ok)}
+.rslot.N{left:50%;top:0}.rslot.S{left:50%;top:100%}.rslot.E{left:100%;top:50%}.rslot.W{left:0;top:50%}
+.tiles{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;min-height:64px}
+.tile{font-size:24px;padding:12px 16px;background:#ffcf3f;border:4px solid transparent}
+.tile.sel{border-color:var(--accent);transform:translateY(-4px)}
+.spin{width:min(340px,86vw);height:min(340px,86vw);margin:0 auto;display:flex;align-items:center;justify-content:center;transition:transform .5s}
+.spin svg{max-width:100%;max-height:100%;border-radius:14px}
+@keyframes blink{50%{opacity:.2}}
+.hint{animation:blink .5s 4}
+
 /* End */
 .card{background:#fff;border-radius:26px;padding:18px;box-shadow:var(--shadow);text-align:center}
 .pic{font-size:80px;line-height:1.1}
@@ -109,6 +134,14 @@ details.parents li{margin:6px 0}
       <div class="go">
         <button class="btn primary" id="goRound"></button>
         <button class="btn" id="goAll"></button>
+      </div>
+    </div>
+    <div class="games">
+      <h2>🎮 Juegos</h2>
+      <div class="glist">
+        <button class="btn" data-game="compass"><span>🧭</span>Puntos cardinales</button>
+        <button class="btn" data-game="map"><span>🏘️</span>Mapa del barrio</button>
+        <button class="btn" data-game="chile"><span>🇨🇱</span>Encuentra Chile</button>
       </div>
     </div>
     <details class="parents">
@@ -143,6 +176,21 @@ details.parents li{margin:6px 0}
   </section>
 
   <!-- END -->
+  <!-- GAME -->
+  <section id="game" class="screen">
+    <div class="top">
+      <button class="btn" id="gHome" aria-label="Menú">🏠</button>
+      <div class="bar"><div id="gbar"></div></div>
+      <div class="starcount">⭐ <span id="gstars">0</span></div>
+    </div>
+    <div class="qcard">
+      <div class="ginstr"><div><div class="qtext" id="gtext"></div><div class="qes" id="ges"></div></div><button class="btn" id="gsay" aria-label="Escuchar otra vez">🔊</button></div>
+      <div class="garea" id="garea"></div>
+      <div class="gmsg" id="gmsg"></div>
+      <button class="btn primary next" id="gnext">Siguiente ➜</button>
+    </div>
+  </section>
+
   <section id="end" class="screen">
     <div class="card">
       <div class="pic">🏆</div>
@@ -248,7 +296,7 @@ function saveBest(n){ try{ localStorage.setItem('ss-best', String(n)); }catch(e)
 
 /* ---------- navigation ---------- */
 function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on', s.id===id)); window.scrollTo(0,0); }
-function goHome(){ stopAudio(); renderHome(); show('home'); }
+function goHome(){ stopAudio(); GM = null; renderHome(); show('home'); }
 $('homeBtn').onclick = goHome; $('endHome').onclick = goHome;
 
 function renderHome(){
@@ -340,6 +388,121 @@ document.addEventListener('pointerdown', function once(){
   try{ actx = actx || new (window.AudioContext||window.webkitAudioContext)(); actx.resume && actx.resume(); }catch(e){}
   document.removeEventListener('pointerdown', once, true);
 }, true);
+
+/* ================= GAMES ================= */
+let GM = null;
+const CAP = s => s[0].toUpperCase() + s.slice(1);
+const DIRS = { N:'North', S:'South', E:'East', W:'West' };
+const DIR_ES = { north:'norte', south:'sur', east:'este', west:'oeste' };
+// Must match social_texts() in tools/make_audio.py
+const mapPrompt = (ref, d) => `Tap what is ${d} of ${D.games.map.places[ref][0]}.`;
+const wiggle = el => { if(!el) return; el.classList.remove('wiggle'); void el.getBoundingClientRect(); el.classList.add('wiggle'); };
+
+document.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>gameStart(b.dataset.game));
+$('gHome').onclick = goHome;
+$('gsay').onclick = ()=>{ if(GM) play([GM.say]); };
+$('gnext').onclick = ()=>{ if(!GM || !GM.done) return; GM.round++; gameRound(); };
+
+function gameStart(kind){
+  GM = { kind, round:0, stars:0 };
+  if(kind==='compass') GM.list = ['letters','words','letters'];
+  if(kind==='map')     GM.list = shuffle(D.games.map.prompts.slice()).slice(0,8);
+  if(kind==='chile')   GM.list = shuffle([['sa',0],['sa',90],['sa',180],['world',0],['world',90],['world',270]]);
+  $('gstars').textContent = 0;
+  show('game'); gameRound();
+}
+function gameRound(){
+  if(GM.round >= GM.list.length) return gameEnd();
+  GM.done = false; GM.miss = 0; GM.lockUntil = Date.now()+400;
+  document.querySelectorAll('.conf').forEach(c=>c.remove());
+  $('gbar').style.width = (GM.round/GM.list.length*100)+'%';
+  $('gmsg').textContent = ''; $('gnext').classList.remove('on');
+  ({ compass:roundCompass, map:roundMap, chile:roundChile })[GM.kind](GM.list[GM.round]);
+  $('gtext').textContent = GM.say; $('ges').textContent = GM.es;
+  play([GM.say]);
+}
+function gameWin(msg){
+  GM.done = true;
+  if(GM.miss===0){ GM.stars++; $('gstars').textContent = GM.stars; }
+  confetti(); sfx.yay();
+  $('gmsg').textContent = msg; $('gnext').classList.add('on');
+  $('gnext').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function gameMiss(el){ GM.miss++; sfx.oops(); wiggle(el); }
+function gameEnd(){
+  stopAudio();
+  const kind = GM.kind, n = GM.list.length, r = GM.stars/n, s = r>=0.9?3:r>=0.6?2:1;
+  $('eStars').textContent = '⭐'.repeat(s) + '☆'.repeat(3-s);
+  $('eMsg').textContent = `${GM.stars} de ${n} a la primera.`;
+  $('review').innerHTML = '';
+  $('again').onclick = ()=>gameStart(kind);
+  GM = null;
+  show('end'); confetti(); sfx.yay(); play([D.phrases.end]);
+}
+
+/* 1. cardinal points: tap a card, then tap its place */
+function roundCompass(mode){
+  GM.say = D.games.compass.say; GM.es = D.games.compass.es;
+  GM.sel = null; GM.left = 4;
+  const label = k => mode==='words' ? DIRS[k] : k;
+  $('garea').innerHTML = `<div class="rose">${PICS.compassBlank}${Object.keys(DIRS).map(k=>`<button class="rslot ${k}" data-slot="${k}">?</button>`).join('')}</div>
+    <div class="tiles">${shuffle(Object.keys(DIRS)).map(k=>`<button class="btn tile" data-tile="${k}">${label(k)}</button>`).join('')}</div>`;
+  const tiles = [...$('garea').querySelectorAll('[data-tile]')];
+  tiles.forEach(t=>t.onclick=()=>{
+    if(GM.done) return;
+    GM.sel = t.dataset.tile; tiles.forEach(x=>x.classList.toggle('sel', x===t));
+    play([DIRS[GM.sel]]);
+  });
+  $('garea').querySelectorAll('[data-slot]').forEach(sl=>sl.onclick=()=>{
+    if(GM.done || sl.classList.contains('done') || Date.now()<GM.lockUntil) return;
+    if(!GM.sel){ wiggle($('garea').querySelector('.tiles')); return; }
+    if(sl.dataset.slot !== GM.sel) return gameMiss(sl);
+    sl.textContent = label(GM.sel); sl.classList.add('done');
+    tiles.find(x=>x.dataset.tile===GM.sel).remove(); GM.sel = null; GM.left--;
+    if(GM.left===0) gameWin('🧭 North ⬆️  South ⬇️  East ➡️  West ⬅️');
+  });
+}
+
+/* 2. neighborhood map: tap what is north/south/east/west of a place */
+function roundMap([ref, dir, target]){
+  const P = D.games.map.places;
+  GM.say = mapPrompt(ref, dir);
+  GM.es = `Toca lo que está al ${DIR_ES[dir]} de ${P[ref][1]}.`.replace(' de el ', ' del ') + ' ' + D.games.map.es;
+  $('garea').innerHTML = PICS.nmapGame(ref);
+  const rect = id => $('garea').querySelector(`[data-place="${id}"] rect`);
+  $('garea').querySelectorAll('[data-place]').forEach(g=>g.onclick=()=>{
+    if(GM.done || Date.now()<GM.lockUntil) return;
+    const id = g.dataset.place;
+    if(id===ref) return wiggle($('garea').querySelector('svg'));
+    if(id!==target){
+      gameMiss($('garea').querySelector('svg'));
+      rect(id).setAttribute('fill', '#ffd0d2');
+      if(GM.miss>=2) rect(target).classList.add('hint');
+      return;
+    }
+    rect(id).setAttribute('fill', '#bff0cf'); rect(id).setAttribute('stroke', '#22a861'); rect(id).setAttribute('stroke-width', 4);
+    gameWin(`✅ ${CAP(P[target][0])} is ${dir} of ${P[ref][0]}.`);
+  });
+}
+
+/* 3. find Chile, with the map turned in different ways */
+function roundChile([which, deg]){
+  const c = D.games.chile;
+  GM.say = c.say; GM.es = c.es;
+  $('garea').innerHTML = `<div class="spin" style="transform:rotate(${deg}deg)">${which==='sa' ? PICS.saGame : PICS.worldGame}</div>`;
+  const chile = $('garea').querySelector('[data-z="chile"]');
+  $('garea').querySelectorAll('[data-z]').forEach(el=>el.onclick=()=>{
+    if(GM.done || Date.now()<GM.lockUntil) return;
+    if(el.dataset.z!=='chile'){
+      gameMiss($('garea').querySelector('.spin svg'));
+      if(GM.miss>=2){ chile.classList.remove('hint'); void chile.getBoundingClientRect(); chile.classList.add('hint'); }
+      return;
+    }
+    chile.classList.remove('hint');
+    chile.setAttribute('fill', '#e11d2e'); chile.setAttribute('stroke', '#e11d2e'); chile.setAttribute('stroke-width', which==='sa'?2:8);
+    gameWin('🇨🇱 Chile!'); play([c.ok]);
+  });
+}
 
 renderHome();
 </script>

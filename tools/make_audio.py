@@ -105,6 +105,11 @@ def social_texts():
         texts.add(q['q'])
         texts.add(q['why'])
         texts.update(a[1] for a in q['a'])
+    g = data['games']
+    texts.update([g['compass']['say'], g['chile']['say'], g['chile']['ok'], 'North', 'South', 'East', 'West'])
+    for ref, d, _ in g['map']['prompts']:
+        # Must match mapPrompt() in social.html
+        texts.add(f"Tap what is {d} of {g['map']['places'][ref][0]}.")
     return texts
 
 

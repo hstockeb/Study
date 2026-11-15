@@ -64,6 +64,7 @@ A random quiz that follows the school's **Social Studies pre-test**. The pre-tes
 - **Random every time:** each round picks 10 questions at random and shuffles the answers. **📚 Todas** asks all 38.
 - **Read aloud in English**, with a Spanish hint under each question and a picture where the pre-test has one.
 - Missed questions come back at the end, and the end screen lists what to review.
+- **🎮 Three games:** put N, S, E, W (letters or words) on the compass rose; tap what is north/south/east/west of a place on the neighborhood map; and find Chile on a map of South America or the world, turned in different ways.
 - **On paper:** the drawing tasks (door symbol, a computer on the teacher's table, coloring Chile) and the questions about her own classroom need to be practiced on paper.
 
 ---

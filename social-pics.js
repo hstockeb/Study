@@ -49,7 +49,7 @@
   /* compass rose; `miss` replaces one letter with a question mark */
   const compass = miss => {
     const P = { N:[110,24], S:[110,206], E:[200,116], W:[20,116] };
-    const letters = Object.entries(P).map(([k,[x,y]]) => k===miss
+    const letters = miss==='all' ? '' : Object.entries(P).map(([k,[x,y]]) => k===miss
       ? `<circle cx="${x}" cy="${y-7}" r="17" fill="#ffcf3f"/>${T(x, y, '?', 22)}`
       : T(x, y, k, 22)).join('');
     return svg('0 0 220 220', `
@@ -113,6 +113,36 @@
   const tag = (x, y, l) => `<circle cx="${x}" cy="${y}" r="15" fill="#ffcf3f" stroke="#2d2a4a" stroke-width="2"/>${T(x, y+7, l, 20)}`;
   const abc = base(`<line x1="46" y1="230" x2="74" y2="230" stroke="#2d2a4a" stroke-width="2"/>${tag(32,230,'A')}${tag(130,100,'B')}${tag(84,36,'C')}`);
 
-  window.SOCIAL_PICS = { front, above, door, playground, nmap, plan, wmap, chile, abc,
+  /* --- game drawings --- */
+  const gblock = (id, x, y, w, h, icon, name, hi) =>
+    `<g data-place="${id}" style="cursor:pointer"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${id===hi?'#ffe27a':'#fff'}" stroke="${id===hi?'#e08a00':'#444'}" stroke-width="${id===hi?4:2}"/><text x="${x+w/2}" y="${y+h/2-2}" font-size="24" text-anchor="middle">${icon}</text>${T(x+w/2, y+h-8, name, 10.5)}</g>`;
+  const nmapGame = hi => svg('0 0 340 300', `
+    <rect width="340" height="300" fill="#cfcfcf"/>
+    ${gblock('catherine',8,8,96,82,'🏠',"Catherine's House",hi)}${gblock('david',124,8,84,82,'🏠',"David's House",hi)}${gblock('park',228,8,104,82,'🌳','Park',hi)}
+    ${gblock('ariana',8,108,96,82,'🏠',"Ariana's House",hi)}${gblock('library',124,108,84,82,'📚','Library',hi)}${gblock('supermarket',228,108,104,82,'🛒','Supermarket',hi)}
+    ${gblock('ruth',8,208,96,84,'🏠',"Ruth's House",hi)}${gblock('school',228,208,104,84,'🏫','School',hi)}
+    <rect x="124" y="208" width="84" height="84" rx="6" fill="#fff" stroke="#444" stroke-width="2"/>
+    <polygon points="166,224 172,246 166,250 160,246" fill="#d9534f"/><polygon points="166,276 172,254 166,250 160,254" fill="#555"/>
+    <polygon points="192,250 170,244 166,250 170,256" fill="#888"/><polygon points="140,250 162,244 166,250 162,256" fill="#888"/>
+    ${T(166,222,'N',12)}${T(166,290,'S',12)}${T(200,254,'E',12)}${T(132,254,'W',12)}`);
+
+  const chilePoly = `<polygon data-z="chile" points="${CH}" fill="#bfe0a3" stroke="#6a8f52" stroke-width="1.5" style="cursor:pointer"/><polygon data-z="chile" points="${CH}" fill="none" stroke="rgba(0,0,0,0)" stroke-width="26" stroke-linejoin="round" pointer-events="stroke" style="cursor:pointer"/>`;
+  const borders = `<g fill="none" stroke="#6a8f52" stroke-width="1.5" pointer-events="none">
+    <polyline points="112,12 120,40 100,70 110,110 135,140 140,170 130,200"/><polyline points="77,162 110,150 135,170"/>
+    <polyline points="50,132 80,120 100,125 110,150"/><polyline points="44,44 70,60 100,70"/><polyline points="86,10 90,40 70,60"/></g>`;
+  const saGame = svg('0 0 220 300', `<rect width="220" height="300" fill="#bfe3ff"/><polygon data-z="other" points="${SA}" fill="#bfe0a3" stroke="#6a8f52" stroke-width="2"/>${borders}${chilePoly}`);
+  const land = d => `<path data-z="other" d="${d}" fill="#bfe0a3" stroke="#6a8f52" stroke-width="1"/>`;
+  const worldGame = svg('0 0 600 330', `
+    <ellipse cx="300" cy="165" rx="296" ry="160" fill="#bfe3ff" stroke="#4a86b8" stroke-width="3"/>
+    <g transform="translate(0,6) scale(2)">
+      ${land('M40 40 q20 -18 48 -10 q10 8 0 22 q-12 6 -14 20 q-10 4 -14 -8 q-18 -6 -20 -24z')}
+      ${land('M136 36 q16 -10 30 -4 q4 8 -6 14 q-14 4 -22 0 z')}
+      ${land('M140 60 q18 -6 30 4 q6 18 -4 36 q-6 14 -14 16 q-8 -18 -10 -30 q-8 -12 -2 -26z')}
+      ${land('M172 30 q34 -14 72 0 q12 12 -2 26 q-18 10 -34 8 q-10 12 -22 0 q-16 -12 -14 -34z')}
+      ${land('M228 104 q16 -8 28 2 q4 12 -8 16 q-16 2 -20 -18z')}
+    </g>
+    <g transform="translate(140,148) scale(0.58)"><polygon data-z="other" points="${SA}" fill="#bfe0a3" stroke="#6a8f52" stroke-width="2"/>${borders}${chilePoly}</g>`);
+
+  window.SOCIAL_PICS = { nmapGame, saGame, worldGame, compassBlank: compass('all'), front, above, door, playground, nmap, plan, wmap, chile, abc,
     compass: compass(null), compassN: compass('N'), compassS: compass('S'), compassE: compass('E'), compassW: compass('W') };
 })();

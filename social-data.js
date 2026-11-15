@@ -5,6 +5,28 @@ window.SOCIAL = {
     "bad": "The correct answer is:",
     "end": "Great job! You finished!"
   },
+  "games": {
+    "compass": { "say": "Put the cardinal points in the correct place.", "es": "Toca una tarjeta y después toca su lugar en la rosa de los vientos." },
+    "chile": { "say": "Find Chile and tap it.", "es": "Busca Chile y tócalo para pintarlo de rojo. ¡El mapa puede estar girado!", "ok": "Great! This is Chile." },
+    "map": {
+      "es": "Mira la rosa de los vientos y toca el lugar correcto.",
+      "places": {
+        "catherine": ["Catherine's house", "la casa de Catherine"], "david": ["David's house", "la casa de David"],
+        "park": ["the park", "el parque"], "ariana": ["Ariana's house", "la casa de Ariana"],
+        "library": ["the library", "la biblioteca"], "supermarket": ["the supermarket", "el supermercado"],
+        "ruth": ["Ruth's house", "la casa de Ruth"], "school": ["the school", "el colegio"]
+      },
+      "prompts": [
+        ["library", "north", "david"], ["library", "east", "supermarket"], ["library", "west", "ariana"],
+        ["supermarket", "north", "park"], ["supermarket", "south", "school"], ["supermarket", "west", "library"],
+        ["david", "south", "library"], ["david", "east", "park"], ["david", "west", "catherine"],
+        ["ariana", "north", "catherine"], ["ariana", "south", "ruth"], ["ariana", "east", "library"],
+        ["catherine", "east", "david"], ["catherine", "south", "ariana"],
+        ["park", "west", "david"], ["park", "south", "supermarket"],
+        ["school", "north", "supermarket"], ["ruth", "north", "ariana"]
+      ]
+    }
+  },
   "questions": [
     { "pic": "front", "q": "This classroom is being looked at:", "es": "Esta sala se está mirando…",
       "a": [["👀", "from the front"], ["🦅", "from above"], ["👉", "from the side"]],
