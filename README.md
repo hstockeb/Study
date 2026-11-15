@@ -1,6 +1,6 @@
 # 🎒 Study
 
-A kid-friendly study web app for a 1st grader: **English spelling dictation**, **math (in English)** and **reading comprehension (in Spanish)**. It is built from the school's own word lists and worksheets, has big buttons, pictures and recorded English audio, and the on-screen text is in Spanish.
+A kid-friendly study web app for a 1st grader: **English spelling dictation**, **math (in English)**, **reading comprehension (in Spanish)** and **Social Studies (in English)**. It is built from the school's own word lists and worksheets, has big buttons, pictures and recorded English audio, and the on-screen text is in Spanish.
 
 🌐 **Live app:** https://hstockeb.github.io/Study/
 
@@ -10,6 +10,7 @@ A kid-friendly study web app for a 1st grader: **English spelling dictation**, *
 | 🔤 English: Dictado Mágico | https://hstockeb.github.io/Study/english.html |
 | 🔢 Math: Math Magic | https://hstockeb.github.io/Study/math.html |
 | 📖 Lectura: Lectura Mágica | https://hstockeb.github.io/Study/lectura.html |
+| 🧭 Social Studies | https://hstockeb.github.io/Study/social.html |
 
 > 📱 **Tip:** on an iPhone/iPad, open the link in Safari, then Share → **Add to Home Screen**. It opens like an app.
 
@@ -55,6 +56,16 @@ A random quiz about the book ***El calcetín de Agustín*** (Mauricio Paredes, i
 - **Pictures:** every answer has a picture (emoji), so she can answer before she can read everything.
 - **After each answer:** a short explanation of the right answer, read aloud. Missed questions come back at the end, and the end screen lists what to review.
 
+## 🧭 Social Studies
+
+A random quiz that follows the school's **Social Studies pre-test**. The pre-test PDF is **not** included; the questions and all the drawings were made for this app.
+
+- **38 questions:** views (from the front / from above / from the side), plans and symbols, tracing a path, cardinal points, the neighborhood map, plan vs. map, and Chile (country, continent, language).
+- **Random every time:** each round picks 10 questions at random and shuffles the answers. **📚 Todas** asks all 38.
+- **Read aloud in English**, with a Spanish hint under each question and a picture where the pre-test has one.
+- Missed questions come back at the end, and the end screen lists what to review.
+- **On paper:** the drawing tasks (door symbol, a computer on the teacher's table, coloring Chile) and the questions about her own classroom need to be practiced on paper.
+
 ---
 
 ## ✏️ Updating for a new test
@@ -73,6 +84,10 @@ A random quiz about the book ***El calcetín de Agustín*** (Mauricio Paredes, i
 1. Edit `lectura-data.js`: the book info and `questions`. Each question has `q`, three answers `a` as `[emoji, text]` with the **correct one first** (the app shuffles them), and `why`, a short explanation.
 2. Regenerate the audio (see below).
 
+### New Social Studies questions
+1. Edit `social-data.js`. Same format as the book quiz, plus `es` (Spanish hint) and an optional `pic` (a drawing name from `social-pics.js`).
+2. Regenerate the audio (see below).
+
 ### Regenerate the audio
 ```bash
 pip install gTTS
@@ -83,20 +98,24 @@ This creates only the missing clips:
 - `audio/letters/`: the letters a–z.
 - `audio/math/`: instructions, problems, equations and the numbers 0–20.
 - `audio/lectura/`: questions, answers and explanations in Spanish.
+- `audio/social/`: Social Studies questions, answers and explanations in English.
 
-Audio file names come from the spoken text. `slug()` in `math.html` and `slugEs()` in `lectura.html` must match `slug()` and `slug_es()` in `tools/make_audio.py`.
+Audio file names come from the spoken text. `slug()` in `math.html` and `slugEs()` in `lectura.html` and `social.html` must match `slug()` and `slug_es()` in `tools/make_audio.py`.
 
 ---
 
 ## 🗂️ Project structure
 
 ```
-index.html            Home page (choose English, Math or Lectura)
+index.html            Home page (choose a subject)
 english.html          English dictation app (self-contained)
 math.html             Math app (UI + logic)
 math-data.js          All math exercises (data only)
 lectura.html          Reading quiz app
 lectura-data.js       Book quiz questions (data only)
+social.html           Social Studies quiz app
+social-data.js        Social Studies questions (data only)
+social-pics.js        Drawings for the Social Studies quiz (SVG)
 audio/                Recorded mp3 clips (generated)
 tools/make_audio.py   Audio generator (gTTS)
 .github/workflows/    "Rebuild GitHub Pages" workflow

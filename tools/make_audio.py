@@ -97,7 +97,25 @@ def lectura():
         save(t, f'audio/lectura/{slug_es(t)}.mp3', lang='es', tld='com.mx')
 
 
+def social_texts():
+    data = load_js('social-data.js')
+    ph = data['phrases']
+    texts = {ph['start'], ph['bad'], ph['end']}
+    for q in data['questions']:
+        texts.add(q['q'])
+        texts.add(q['why'])
+        texts.update(a[1] for a in q['a'])
+    return texts
+
+
+def social():
+    # English clips; file names use the same scheme as lectura (slugEs in social.html)
+    for t in sorted(social_texts()):
+        save(t, f'audio/social/{slug_es(t)}.mp3')
+
+
 if __name__ == '__main__':
     english()
     math()
     lectura()
+    social()
