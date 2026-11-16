@@ -119,8 +119,25 @@ def social():
         save(t, f'audio/social/{slug_es(t)}.mp3')
 
 
+def science_texts():
+    data = load_js('science-data.js')
+    ph = data['phrases']
+    texts = {ph['start'], ph['bad'], ph['end'], data['games']['label']['say'], *data['games']['label']['slots']}
+    for q in data['questions']:
+        texts.add(q['q'])
+        texts.add(q['why'])
+        texts.update(a[1] for a in q['a'])
+    return texts
+
+
+def science():
+    for t in sorted(science_texts()):
+        save(t, f'audio/science/{slug_es(t)}.mp3')
+
+
 if __name__ == '__main__':
     english()
     math()
     lectura()
     social()
+    science()

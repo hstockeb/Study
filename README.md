@@ -1,6 +1,6 @@
 # 🎒 Study
 
-A kid-friendly study web app for a 1st grader: **English spelling dictation**, **math (in English)**, **reading comprehension (in Spanish)** and **Social Studies (in English)**. It is built from the school's own word lists and worksheets, has big buttons, pictures and recorded English audio, and the on-screen text is in Spanish.
+A kid-friendly study web app for a 1st grader: **English spelling dictation**, **math (in English)**, **reading comprehension (in Spanish)**, **Social Studies** and **Science** (both in English). It is built from the school's own word lists and worksheets, has big buttons, pictures and recorded English audio, and the on-screen text is in Spanish.
 
 🌐 **Live app:** https://hstockeb.github.io/Study/
 
@@ -11,6 +11,7 @@ A kid-friendly study web app for a 1st grader: **English spelling dictation**, *
 | 🔢 Math: Math Magic | https://hstockeb.github.io/Study/math.html |
 | 📖 Lectura: Lectura Mágica | https://hstockeb.github.io/Study/lectura.html |
 | 🧭 Social Studies | https://hstockeb.github.io/Study/social.html |
+| 🌱 Science | https://hstockeb.github.io/Study/science.html |
 
 > 📱 **Tip:** on an iPhone/iPad, open the link in Safari, then Share → **Add to Home Screen**. It opens like an app.
 
@@ -67,6 +68,16 @@ A random quiz that follows the school's **Social Studies pre-test**. The pre-tes
 - **🎮 Three games:** put N, S, E, W (letters or words) on the compass rose; tap what is north/south/east/west of a place on the neighborhood map; and find Chile on a map of South America or the world, turned in different ways.
 - **On paper:** the drawing tasks (door symbol, a computer on the teacher's table, coloring Chile) and the questions about her own classroom need to be practiced on paper.
 
+## 🌱 Science
+
+A random quiz that follows the school's **Science pre-test** (*What living things surround me?*). It uses pictures cropped from the pre-test (in `img/science/`); the PDF itself is not included.
+
+- **32 questions:** what plants need, living things, the closed-box experiment, parts of a plant, seed shapes, leaf shapes, thick or thin stems, and petal shapes.
+- **Random every time:** each round picks 10 questions at random and shuffles the answers. **📚 Todas** asks all 32.
+- **Read aloud in English**, with the Spanish word under each answer and a Spanish hint under each question.
+- **🎮 Game:** label the parts of a plant (flower, fruit, stem, leaves, root) on the pre-test's diagram.
+- **On paper:** writing the plant parts and drawing a favorite plant with three labeled parts.
+
 ---
 
 ## ✏️ Updating for a new test
@@ -89,6 +100,10 @@ A random quiz that follows the school's **Social Studies pre-test**. The pre-tes
 1. Edit `social-data.js`. Same format as the book quiz, plus `es` (Spanish hint) and an optional `pic` (a drawing name from `social-pics.js`).
 2. Regenerate the audio (see below).
 
+### New Science questions
+1. Edit `science-data.js`. Same format as Social Studies; an answer picture is written as `"img:name"` and a question picture as `"pic": "name"`, both pointing to `img/science/name.jpg`. Add the Spanish word of each new answer to `tr`.
+2. Regenerate the audio (see below).
+
 ### Regenerate the audio
 ```bash
 pip install gTTS
@@ -100,8 +115,9 @@ This creates only the missing clips:
 - `audio/math/`: instructions, problems, equations and the numbers 0–20.
 - `audio/lectura/`: questions, answers and explanations in Spanish.
 - `audio/social/`: Social Studies questions, answers and explanations in English.
+- `audio/science/`: Science questions, answers and explanations in English.
 
-Audio file names come from the spoken text. `slug()` in `math.html` and `slugEs()` in `lectura.html` and `social.html` must match `slug()` and `slug_es()` in `tools/make_audio.py`.
+Audio file names come from the spoken text. `slug()` in `math.html` and `slugEs()` in `lectura.html`, `social.html` and `science.html` must match `slug()` and `slug_es()` in `tools/make_audio.py`.
 
 ---
 
@@ -117,6 +133,9 @@ lectura-data.js       Book quiz questions (data only)
 social.html           Social Studies quiz app
 social-data.js        Social Studies questions (data only)
 social-pics.js        Drawings for the Social Studies quiz (SVG)
+science.html          Science quiz app
+science-data.js       Science questions (data only)
+img/science/          Pictures for the Science quiz
 audio/                Recorded mp3 clips (generated)
 tools/make_audio.py   Audio generator (gTTS)
 .github/workflows/    "Rebuild GitHub Pages" workflow
