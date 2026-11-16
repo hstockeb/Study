@@ -1,6 +1,6 @@
 # 🎒 Study
 
-A kid-friendly study web app for a 1st grader: **English spelling dictation**, **math (in English)**, **reading comprehension (in Spanish)**, **Social Studies** and **Science** (both in English). It is built from the school's own word lists and worksheets, has big buttons, pictures and recorded English audio, and the on-screen text is in Spanish.
+A kid-friendly study web app for a 1st grader: **English spelling dictation**, **math (in English)**, **reading comprehension (in Spanish)**, **Social Studies** and **Science** (both in English), and **Lenguaje** (in Spanish). It is built from the school's own word lists and worksheets, has big buttons, pictures and recorded English audio, and the on-screen text is in Spanish.
 
 🌐 **Live app:** https://hstockeb.github.io/Study/
 
@@ -12,6 +12,7 @@ A kid-friendly study web app for a 1st grader: **English spelling dictation**, *
 | 📖 Lectura: Lectura Mágica | https://hstockeb.github.io/Study/lectura.html |
 | 🧭 Social Studies | https://hstockeb.github.io/Study/social.html |
 | 🌱 Science | https://hstockeb.github.io/Study/science.html |
+| ✏️ Lenguaje | https://hstockeb.github.io/Study/lenguaje.html |
 
 > 📱 **Tip:** on an iPhone/iPad, open the link in Safari, then Share → **Add to Home Screen**. It opens like an app.
 
@@ -78,6 +79,17 @@ A random quiz that follows the school's **Science pre-test** (*What living thing
 - **🎮 Game:** label the parts of a plant (flower, fruit, stem, leaves, root) on the pre-test's diagram.
 - **On paper:** writing the plant parts and drawing a favorite plant with three labeled parts.
 
+## ✏️ Lenguaje
+
+Follows the school's **Evaluación Formativa de Lenguaje** (new letters: GA-GO-GU, GUE-GUI, GE-GI, B, ZA-ZO-ZU, CE-CI, LL, Ñ), in Spanish, with the drawings from the evaluation (in `img/lenguaje/`). The document itself is not included.
+
+- **28 questions:** reading comprehension of the short text about Cecilia, how to spell the name of each drawing, completing sentences with the word bank, picking the sentence that matches a drawing, and choosing the correctly spelled word.
+- **Random every time:** 10 questions per round with shuffled answers, or all 28.
+- **Read aloud in Spanish.** Spelling alternatives are not read aloud, because they would sound the same.
+- **🎮 Dictado de palabras:** hear a word with the new letters and type it on a Spanish keyboard (with Ñ).
+- **🎮 Dictado de oraciones:** hear a sentence, write it in the notebook, then check it.
+- **On paper:** writing the name of each drawing and writing a sentence for each drawing.
+
 ---
 
 ## ✏️ Updating for a new test
@@ -104,6 +116,10 @@ A random quiz that follows the school's **Science pre-test** (*What living thing
 1. Edit `science-data.js`. Same format as Social Studies; an answer picture is written as `"img:name"` and a question picture as `"pic": "name"`, both pointing to `img/science/name.jpg`. Add the Spanish word of each new answer to `tr`.
 2. Regenerate the audio (see below).
 
+### New Lenguaje content
+1. Edit `lenguaje-data.js`: the reading text, the questions, and the dictation `words` and `sentences`. Use `"silent": true` on spelling questions (alternatives are not read) and `"say"` for a word to read after the question.
+2. Regenerate the audio (see below).
+
 ### Regenerate the audio
 ```bash
 pip install gTTS
@@ -116,8 +132,9 @@ This creates only the missing clips:
 - `audio/lectura/`: questions, answers and explanations in Spanish.
 - `audio/social/`: Social Studies questions, answers and explanations in English.
 - `audio/science/`: Science questions, answers and explanations in English.
+- `audio/lenguaje/`: Lenguaje questions, the reading text and dictation words in Spanish.
 
-Audio file names come from the spoken text. `slug()` in `math.html` and `slugEs()` in `lectura.html`, `social.html` and `science.html` must match `slug()` and `slug_es()` in `tools/make_audio.py`.
+Audio file names come from the spoken text. `slug()` in `math.html` and `slugEs()` in `lectura.html`, `social.html`, `science.html` and `lenguaje.html` must match `slug()` and `slug_es()` in `tools/make_audio.py`.
 
 ---
 
@@ -136,6 +153,9 @@ social-pics.js        Drawings for the Social Studies quiz (SVG)
 science.html          Science quiz app
 science-data.js       Science questions (data only)
 img/science/          Pictures for the Science quiz
+lenguaje.html         Lenguaje quiz and dictation app
+lenguaje-data.js      Lenguaje questions and dictation words (data only)
+img/lenguaje/         Pictures for the Lenguaje quiz
 audio/                Recorded mp3 clips (generated)
 tools/make_audio.py   Audio generator (gTTS)
 .github/workflows/    "Rebuild GitHub Pages" workflow

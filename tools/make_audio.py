@@ -135,9 +135,29 @@ def science():
         save(t, f'audio/science/{slug_es(t)}.mp3')
 
 
+def lenguaje_texts():
+    data = load_js('lenguaje-data.js')
+    ph, g = data['phrases'], data['games']
+    texts = {ph['start'], ph['bad'], ph['end'], data['reading']['text'], *g['dictado']['words'], *g['oraciones']['sentences']}
+    for q in data['questions']:
+        texts.add(q['q'])
+        texts.add(q['why'])
+        if 'say' in q:
+            texts.add(q['say'])
+        # misspelled alternatives are never read aloud; only the correct one is
+        texts.update(a[1] for a in (q['a'][:1] if q.get('silent') else q['a']))
+    return texts
+
+
+def lenguaje():
+    for t in sorted(lenguaje_texts()):
+        save(t, f'audio/lenguaje/{slug_es(t)}.mp3', lang='es', tld='com.mx')
+
+
 if __name__ == '__main__':
     english()
     math()
     lectura()
     social()
     science()
+    lenguaje()
