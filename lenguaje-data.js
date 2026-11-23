@@ -13,14 +13,11 @@ window.LENGUAJE = {
   "games": {
     "dictado": {
       "title": "Escucha y escribe la palabra.", "es": "Toca 🔊 para escucharla otra vez.",
-      "words": ["gato", "gorro", "gusano", "guitarra", "juguete", "gente", "gigante", "girasol", "bota", "bufanda", "barco",
-                "zapato", "zorro", "azul", "cebolla", "cereal", "cine", "circo", "lluvia", "llave", "pollito", "calle", "gallina",
-                "niño", "uña", "araña", "montaña", "jugo", "naranja", "zanahoria"]
+      "words": ["cepillo", "gente", "gelatina", "lluvia", "guindas", "cinturón"]
     },
     "oraciones": {
       "title": "Escucha y escribe la oración en tu cuaderno.", "es": "Toca 🔊 para escucharla otra vez. Después revisa tu respuesta.",
-      "sentences": ["Cecilia usa gorro y bufanda.", "El zorro camina en la calle.", "La gallina tiene pollitos.",
-                    "El niño toca la guitarra.", "Las manzanas están muy ricas.", "El gigante usa zapatos azules."]
+      "sentences": ["Mañana Miguel subirá la montaña.", "Hoy hay pajaritos en el nido."]
     }
   },
   "questions": [
@@ -111,6 +108,30 @@ window.LENGUAJE = {
       "why": "Se escribe montaña, con Ñ." },
     { "silent": true, "say": "bufanda", "q": "¿Cuál palabra está bien escrita?",
       "a": [["✏️", "bufanda"], ["✏️", "vufanda"], ["✏️", "bufamda"]],
-      "why": "Se escribe bufanda, con B." }
+      "why": "Se escribe bufanda, con B." },
+    { "silent": true, "say": "cepillo", "q": "Dictado: ¿cuál palabra está bien escrita?",
+      "a": [["✏️", "cepillo"], ["✏️", "cepiyo"], ["✏️", "sepillo"]],
+      "why": "Se escribe cepillo, con C E y doble L." },
+    { "silent": true, "say": "gente", "q": "Dictado: ¿cuál palabra está bien escrita?",
+      "a": [["✏️", "gente"], ["✏️", "jente"], ["✏️", "guente"]],
+      "why": "Se escribe gente, con G E." },
+    { "silent": true, "say": "gelatina", "q": "Dictado: ¿cuál palabra está bien escrita?",
+      "a": [["✏️", "gelatina"], ["✏️", "jelatina"], ["✏️", "guelatina"]],
+      "why": "Se escribe gelatina, con G E." },
+    { "silent": true, "say": "lluvia", "q": "Dictado: ¿cuál palabra está bien escrita?",
+      "a": [["✏️", "lluvia"], ["✏️", "yuvia"], ["✏️", "luvia"]],
+      "why": "Se escribe lluvia, con doble L." },
+    { "silent": true, "say": "guindas", "q": "Dictado: ¿cuál palabra está bien escrita?",
+      "a": [["✏️", "guindas"], ["✏️", "gindas"], ["✏️", "güindas"]],
+      "why": "Se escribe guindas, con G U I." },
+    { "silent": true, "say": "cinturón", "q": "Dictado: ¿cuál palabra está bien escrita?",
+      "a": [["✏️", "cinturón"], ["✏️", "sinturón"], ["✏️", "zinturón"]],
+      "why": "Se escribe cinturón, con C I y tilde en la O." },
+    { "silent": true, "say": "Mañana Miguel subirá la montaña.", "q": "Dictado: ¿cuál oración está bien escrita?",
+      "a": [["✏️", "Mañana Miguel subirá la montaña."], ["✏️", "mañana miguel subira la montaña"], ["✏️", "Mañana Miguel subirá la montania."]],
+      "why": "Empieza con mayúscula, Miguel también lleva mayúscula, subirá lleva tilde y termina con punto." },
+    { "silent": true, "say": "Hoy hay pajaritos en el nido.", "q": "Dictado: ¿cuál oración está bien escrita?",
+      "a": [["✏️", "Hoy hay pajaritos en el nido."], ["✏️", "Oy ay pajaritos en el nido."], ["✏️", "hoy hay pajaritos en el nido"]],
+      "why": "Hoy y hay se escriben con H. Empieza con mayúscula y termina con punto." }
   ]
 };

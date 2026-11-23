@@ -180,7 +180,7 @@ details.parents li{margin:6px 0}
         <li><b>Lectura:</b> pídanle que lea sola el texto de Cecilia. El botón 🔊 del texto es solo para revisar.</li>
         <li>Cada ronda elige preguntas <b>al azar</b> y cambia el orden de las respuestas. Las que falla vuelven al final.</li>
         <li>En las preguntas de "¿cómo se escribe?" la app no lee las alternativas, porque sonarían igual.</li>
-        <li><b>Dictado:</b> la evaluación no trae las palabras, así que la app usa palabras con las letras nuevas. Si la profesora envía una lista, se puede cambiar.</li>
+        <li><b>Dictado:</b> son las palabras y oraciones del dictado de la evaluación: <i>cepillo, gente, gelatina, lluvia, guindas, cinturón</i>; "Mañana Miguel subirá la montaña." y "Hoy hay pajaritos en el nido."</li>
         <li><b>Para practicar en papel:</b> escribir el nombre de cada dibujo, escribir una oración para cada dibujo y el dictado de oraciones.</li>
       </ul>
     </details>
@@ -470,7 +470,7 @@ function gameEnd(){
 }
 
 /* dictation of words: listen and type */
-const KB = ['qwertyuiop','asdfghjklñ','zxcvbnm'];
+const KB = ['qwertyuiop','asdfghjklñ','zxcvbnm','áéíóú'];
 function roundDictado(word){
   const g = D.games.dictado;
   GM.title = g.title; GM.es = g.es; GM.say = word; GM.typed = '';

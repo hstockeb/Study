@@ -86,8 +86,8 @@ Follows the school's **Evaluación Formativa de Lenguaje** (new letters: GA-GO-G
 - **28 questions:** reading comprehension of the short text about Cecilia, how to spell the name of each drawing, completing sentences with the word bank, picking the sentence that matches a drawing, and choosing the correctly spelled word.
 - **Random every time:** 10 questions per round with shuffled answers, or all 28.
 - **Read aloud in Spanish.** Spelling alternatives are not read aloud, because they would sound the same.
-- **🎮 Dictado de palabras:** hear a word with the new letters and type it on a Spanish keyboard (with Ñ).
-- **🎮 Dictado de oraciones:** hear a sentence, write it in the notebook, then check it.
+- **🎮 Dictado de palabras:** the evaluation's 6 words (cepillo, gente, gelatina, lluvia, guindas, cinturón): hear each one and type it on a Spanish keyboard (with Ñ and accents).
+- **🎮 Dictado de oraciones:** the evaluation's 2 sentences: hear each one, write it in the notebook, then check it.
 - **On paper:** writing the name of each drawing and writing a sentence for each drawing.
 
 ---
